@@ -37,5 +37,5 @@ public class Locators {
     // Error Handling
     public static final By ERROR_POPUP = By.className("ComposeConfirmPopup-Title");
     public static final By ERROR_POPUP_CLOSE_BUTTON = By.xpath("(//button[@data-lego='react'])[1]");
-    public static final By LOGOUT_SCREEN = By.className("logout-heading");
+    public static final By LOGOUT_SCREEN = By.xpath("//span[normalize-space(text())='Log in to another account?'][@data-variant='heading-l']");
 }

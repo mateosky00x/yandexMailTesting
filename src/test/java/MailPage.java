@@ -98,7 +98,6 @@ public class MailPage {
         WebElement iframe = wait.until(ExpectedConditions.presenceOfElementLocated(Locators.IFRAME_ACCOUNT_FRAME));
         driver.switchTo().frame(iframe);
         click(Locators.LOGOUT_BUTTON);
-        driver.switchTo().defaultContent();
         wait.until(ExpectedConditions.visibilityOfElementLocated(Locators.LOGOUT_SCREEN));
     }
 
