@@ -1,14 +1,18 @@
-// ✅ LoginPage.java
+package com.epam.ta.page;
+import com.epam.ta.model.AbstractPage;
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
-public class LoginPage {
-    private final WebDriver driver;
-    private final WebDriverWait wait;
+public class LoginPage extends AbstractPage {
 
     public LoginPage(WebDriver driver) {
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, 20);
+        super(driver);
+    }
+
+    @Override
+    protected AbstractPage openPage() {
+        driver.get("https://360.yandex.com/mail/");
+        return this;
     }
 
     public void navigateToMail() {

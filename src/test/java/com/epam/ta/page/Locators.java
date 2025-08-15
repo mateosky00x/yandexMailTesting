@@ -1,4 +1,4 @@
-// ✅ Locators.java
+package com.epam.ta.page;// ✅ com.epam.ta.page.Locators.java
 import org.openqa.selenium.By;
 
 public class Locators {
@@ -15,14 +15,15 @@ public class Locators {
     public static final By SUBJECT_FIELD = By.cssSelector("input[name='subject']");
     public static final By BODY_FIELD = By.cssSelector("div.cke_wysiwyg_div");
     public static final By CLOSE_BUTTON = By.xpath("(//button[@aria-label='Close'])[1]");
-    public static final By SEND_BUTTON = By.xpath("//button[.//span[text()='Send']]");
+    public static final By SEND_BUTTON = By.xpath("//span[text()='Send']//ancestor::button");
 
     // Folders
     public static final By DRAFTS_FOLDER = By.cssSelector("a[href='#draft'][class*='Folder-m__link']");
-    public static final By SENT_FOLDER = By.xpath("//a[@href='#sent' and contains(@class, 'qa-LeftColumn-FolderLink')]");
-    public static By draftMessage(String subject) {
-        return By.xpath(String.format("//span[@title='%s']", subject));
-    }
+    public static final By SENT_FOLDER = By.xpath("//span[text()='Sent']");
+    public static String DRAFT_MESSAGE = "//span[@title='%s']";
+
+    public static final By DRAFT_CONTAINER = By.xpath("//div[@data-testid='messages-list_scroller_container']");
+
 
     // Draft management
     public static final By MESSAGE_SENT = By.xpath("//span[text()='Message sent']");

@@ -1,16 +1,23 @@
-// ✅ MailPage.java
+package com.epam.ta.page;
+
+import com.epam.ta.model.AbstractPage;
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.*;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
 
-public class MailPage {
-    private final WebDriver driver;
-    private final WebDriverWait wait;
+import static com.epam.ta.page.Locators.DRAFT_MESSAGE;
+
+public class MailPage extends AbstractPage {
 
     public MailPage(WebDriver driver) {
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, 20);
+        super(driver);
+    }
+
+    @Override
+    protected AbstractPage openPage() {
+        throw new UnsupportedOperationException("MailPage does not support direct openPage()");
     }
 
     public void composeEmail(String recipient, String subject, String body) {
@@ -27,6 +34,7 @@ public class MailPage {
     }
 
     public void saveAsDraft() {
+        wait.until(ExpectedConditions.presenceOfElementLocated(Locators.CLOSE_BUTTON));
         click(Locators.CLOSE_BUTTON);
     }
 
@@ -35,27 +43,44 @@ public class MailPage {
     }
 
     public void openSentFolder() {
-        click(Locators.SENT_FOLDER);
+        JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
+        WebElement element = driver.findElement(Locators.SENT_FOLDER);
+        wait.until(ExpectedConditions.elementToBeClickable(Locators.SENT_FOLDER));
+        // Locate the element using standard WebDriver methods
+        jsExecutor.executeScript("arguments[0].click();", element);
+        //click(Locators.SENT_FOLDER);
     }
 
     public boolean isEmailInDrafts(String subject) {
+        By draftEmail = By.xpath(String.format(DRAFT_MESSAGE, subject));
         try {
-            return driver.findElement(Locators.draftMessage(subject)).isDisplayed();
-        } catch (NoSuchElementException e) {
+            Thread.sleep(2000);
+            wait.until(ExpectedConditions.visibilityOfElementLocated(Locators.DRAFT_CONTAINER));
+            return driver.findElement(draftEmail).isDisplayed();
+        } catch (Exception e) {
             return false;
         }
     }
 
     public boolean isEmailInSent(String subject) {
+
         try {
-            return driver.findElement(Locators.draftMessage(subject)).isDisplayed();
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(String.format(DRAFT_MESSAGE, subject))));
+            return driver.findElement(By.xpath(String.format(DRAFT_MESSAGE, subject))).isDisplayed();
         } catch (NoSuchElementException e) {
             return false;
         }
     }
 
+
+    public void moveToElement(){
+        Actions actions = new Actions(driver);
+        WebElement sentButton = driver.findElement(Locators.SENT_FOLDER);
+        actions.moveToElement(sentButton);
+    }
     public void openDraftMessage(String subject) {
-        click(Locators.draftMessage(subject));
+
+        click(By.xpath(String.format(DRAFT_MESSAGE, subject)));
     }
 
     public void openDraftEmail(String subject) {
@@ -102,6 +127,7 @@ public class MailPage {
     }
 
     private void click(By locator) {
+
         wait.until(ExpectedConditions.elementToBeClickable(locator)).click();
     }
 
