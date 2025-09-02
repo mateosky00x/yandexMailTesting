@@ -1,16 +1,19 @@
 package com.epam.ta.test;
-
 import com.epam.ta.driver.DriverSingleton;
 import com.epam.ta.model.User;
 import com.epam.ta.page.LoginPage;
 import com.epam.ta.page.MailPage;
 import com.epam.ta.service.UserCreator;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import com.epam.ta.util.TestListener;
 import org.openqa.selenium.WebDriver;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
+import org.testng.annotations.Test;
+import static org.testng.AssertJUnit.assertFalse;
+import static org.testng.AssertJUnit.assertTrue;
 
-import static org.junit.Assert.*;
+@Listeners(TestListener.class)
 
 public class Test_02_Delete_Draft {
 
@@ -20,7 +23,7 @@ public class Test_02_Delete_Draft {
 
     User testUser = UserCreator.withCredentialsFromProperty();
 
-    @Before
+    @BeforeMethod
     public void setUp() {
         driver = DriverSingleton.getDriver();
         loginPage = new LoginPage(driver);
@@ -54,7 +57,7 @@ public class Test_02_Delete_Draft {
         mailPage.logout();
     }
 
-    @After
+    @AfterMethod
     public void tearDown() {
         DriverSingleton.closeDriver();
     }

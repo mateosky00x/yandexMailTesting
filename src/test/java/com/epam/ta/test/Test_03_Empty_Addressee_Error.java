@@ -1,16 +1,19 @@
 package com.epam.ta.test;
-
 import com.epam.ta.driver.DriverSingleton;
 import com.epam.ta.model.User;
 import com.epam.ta.page.LoginPage;
 import com.epam.ta.page.MailPage;
 import com.epam.ta.service.UserCreator;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import com.epam.ta.util.TestListener;
 import org.openqa.selenium.WebDriver;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
+import org.testng.annotations.Test;
 
-import static org.junit.Assert.*;
+import static org.testng.AssertJUnit.assertTrue;
+
+@Listeners(TestListener.class)
 
 public class Test_03_Empty_Addressee_Error {
 
@@ -20,7 +23,7 @@ public class Test_03_Empty_Addressee_Error {
 
     User testUser = UserCreator.withCredentialsFromProperty();
 
-    @Before
+    @BeforeMethod
     public void setUp() {
         driver = DriverSingleton.getDriver();
         loginPage = new LoginPage(driver);
@@ -48,7 +51,7 @@ public class Test_03_Empty_Addressee_Error {
         mailPage.logout();
     }
 
-    @After
+    @AfterMethod
     public void tearDown() {
         DriverSingleton.closeDriver();
     }
