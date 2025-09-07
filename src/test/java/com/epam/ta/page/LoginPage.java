@@ -1,12 +1,26 @@
 package com.epam.ta.page;
+
 import com.epam.ta.model.AbstractPage;
-import org.openqa.selenium.*;
+import com.epam.ta.core.Button;
+import com.epam.ta.core.TextBox;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class LoginPage extends AbstractPage {
 
+    private Button loginButton;
+    private TextBox usernameField;
+    private Button submitButton;
+    private TextBox passwordField;
+    private Button nextButton;
+
     public LoginPage(WebDriver driver) {
         super(driver);
+        this.loginButton = new Button(driver, Locators.LOGIN_BUTTON);
+        this.usernameField = new TextBox(driver, Locators.USERNAME_FIELD);
+        this.submitButton = new Button(driver, Locators.SUBMIT_BUTTON);
+        this.passwordField = new TextBox(driver, Locators.PASSWORD_FIELD);
+        this.nextButton = new Button(driver, Locators.NEXT_BUTTON);
     }
 
     @Override
@@ -20,31 +34,16 @@ public class LoginPage extends AbstractPage {
     }
 
     public void login(String username, String password) {
-        click(Locators.LOGIN_BUTTON);
-        sendKeys(Locators.USERNAME_FIELD, username);
-        click(Locators.SUBMIT_BUTTON);
-        sendKeys(Locators.PASSWORD_FIELD, password);
-        click(Locators.NEXT_BUTTON);
+        loginButton.click();
+        usernameField.enterText(username);
+        submitButton.click();
+        passwordField.enterText(password);
+        nextButton.click();
         wait.until(ExpectedConditions.visibilityOfElementLocated(Locators.INTERFACE_LOADED));
     }
 
     public boolean isUserLoggedIn() {
-        return isDisplayed(Locators.INTERFACE_LOADED);
-    }
-
-    private void click(By locator) {
-        wait.until(ExpectedConditions.elementToBeClickable(locator)).click();
-    }
-
-    private void sendKeys(By locator, String text) {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(locator)).sendKeys(text);
-    }
-
-    private boolean isDisplayed(By locator) {
-        try {
-            return wait.until(ExpectedConditions.visibilityOfElementLocated(locator)).isDisplayed();
-        } catch (TimeoutException e) {
-            return false;
-        }
+        return driver.findElement(Locators.INTERFACE_LOADED).isDisplayed();
     }
 }
+

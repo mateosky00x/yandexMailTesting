@@ -1,5 +1,7 @@
 package com.epam.ta.test;
+
 import com.epam.ta.driver.DriverSingleton;
+import com.epam.ta.factory.PageFactory;
 import com.epam.ta.model.User;
 import com.epam.ta.page.LoginPage;
 import com.epam.ta.page.MailPage;
@@ -14,20 +16,19 @@ import org.testng.annotations.Test;
 import static org.testng.AssertJUnit.assertTrue;
 
 @Listeners(TestListener.class)
-
 public class Test_03_Empty_Addressee_Error {
 
     private WebDriver driver;
     private LoginPage loginPage;
     private MailPage mailPage;
 
-    User testUser = UserCreator.withCredentialsFromProperty();
+    private User testUser = UserCreator.withCredentialsFromProperty();
 
     @BeforeMethod
     public void setUp() {
         driver = DriverSingleton.getDriver();
-        loginPage = new LoginPage(driver);
-        mailPage = new MailPage(driver);
+        loginPage = PageFactory.getPage(LoginPage.class, driver);
+        mailPage = PageFactory.getPage(MailPage.class, driver);
     }
 
     @Test

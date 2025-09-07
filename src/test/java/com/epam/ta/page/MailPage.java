@@ -1,6 +1,8 @@
 package com.epam.ta.page;
 
 import com.epam.ta.model.AbstractPage;
+import com.epam.ta.core.Button;
+import com.epam.ta.core.TextBox;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -11,8 +13,33 @@ import static com.epam.ta.page.Locators.DRAFT_MESSAGE;
 
 public class MailPage extends AbstractPage {
 
+    // Elements from core
+    private Button composeButton;
+    private TextBox recipientField;
+    private TextBox subjectField;
+    private TextBox bodyField;
+    private Button closeButton;
+    private Button sendButton;
+    private Button draftsFolder;
+    private Button sentFolder;
+    private Button selectMessage;
+    private Button deleteMessage;
+    private Button errorPopupCloseButton;
+
     public MailPage(WebDriver driver) {
         super(driver);
+
+        this.composeButton = new Button(driver, Locators.COMPOSE_BUTTON);
+        this.recipientField = new TextBox(driver, Locators.RECIPIENT_FIELD);
+        this.subjectField = new TextBox(driver, Locators.SUBJECT_FIELD);
+        this.bodyField = new TextBox(driver, Locators.BODY_FIELD);
+        this.closeButton = new Button(driver, Locators.CLOSE_BUTTON);
+        this.sendButton = new Button(driver, Locators.SEND_BUTTON);
+        this.draftsFolder = new Button(driver, Locators.DRAFTS_FOLDER);
+        this.sentFolder = new Button(driver, Locators.SENT_FOLDER);
+        this.selectMessage = new Button(driver, Locators.SELECT_MESSAGE);
+        this.deleteMessage = new Button(driver, Locators.DELETE_MESSAGE);
+        this.errorPopupCloseButton = new Button(driver, Locators.ERROR_POPUP_CLOSE_BUTTON);
     }
 
     @Override
@@ -21,34 +48,32 @@ public class MailPage extends AbstractPage {
     }
 
     public void composeEmail(String recipient, String subject, String body) {
-        click(Locators.COMPOSE_BUTTON);
-        sendKeys(Locators.RECIPIENT_FIELD, recipient);
-        sendKeys(Locators.SUBJECT_FIELD, subject);
-        sendKeys(Locators.BODY_FIELD, body);
+        composeButton.click();
+        recipientField.enterText(recipient);
+        subjectField.enterText(subject);
+        bodyField.enterText(body);
     }
 
     public void composeEmailWithoutRecipient(String subject, String body) {
-        click(Locators.COMPOSE_BUTTON);
-        sendKeys(Locators.SUBJECT_FIELD, subject);
-        sendKeys(Locators.BODY_FIELD, body);
+        composeButton.click();
+        subjectField.enterText(subject);
+        bodyField.enterText(body);
     }
 
     public void saveAsDraft() {
         wait.until(ExpectedConditions.presenceOfElementLocated(Locators.CLOSE_BUTTON));
-        click(Locators.CLOSE_BUTTON);
+        closeButton.click();
     }
 
     public void openDraftsFolder() {
-        click(Locators.DRAFTS_FOLDER);
+        draftsFolder.click();
     }
 
     public void openSentFolder() {
         JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
         WebElement element = driver.findElement(Locators.SENT_FOLDER);
         wait.until(ExpectedConditions.elementToBeClickable(Locators.SENT_FOLDER));
-        // Locate the element using standard WebDriver methods
         jsExecutor.executeScript("arguments[0].click();", element);
-        //click(Locators.SENT_FOLDER);
     }
 
     public boolean isEmailInDrafts(String subject) {
@@ -63,7 +88,6 @@ public class MailPage extends AbstractPage {
     }
 
     public boolean isEmailInSent(String subject) {
-
         try {
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(String.format(DRAFT_MESSAGE, subject))));
             return driver.findElement(By.xpath(String.format(DRAFT_MESSAGE, subject))).isDisplayed();
@@ -72,15 +96,14 @@ public class MailPage extends AbstractPage {
         }
     }
 
-
-    public void moveToElement(){
+    public void moveToElement() {
         Actions actions = new Actions(driver);
         WebElement sentButton = driver.findElement(Locators.SENT_FOLDER);
-        actions.moveToElement(sentButton);
+        actions.moveToElement(sentButton).perform();
     }
-    public void openDraftMessage(String subject) {
 
-        click(By.xpath(String.format(DRAFT_MESSAGE, subject)));
+    public void openDraftMessage(String subject) {
+        new Button(driver, By.xpath(String.format(DRAFT_MESSAGE, subject))).click();
     }
 
     public void openDraftEmail(String subject) {
@@ -93,13 +116,13 @@ public class MailPage extends AbstractPage {
     }
 
     public void sendEmail() {
-        click(Locators.SEND_BUTTON);
+        sendButton.click();
         wait.until(ExpectedConditions.visibilityOfElementLocated(Locators.MESSAGE_SENT));
     }
 
     public void deleteDraft() {
-        click(Locators.SELECT_MESSAGE);
-        click(Locators.DELETE_MESSAGE);
+        selectMessage.click();
+        deleteMessage.click();
     }
 
     public boolean isErrorPopupDisplayed() {
@@ -115,23 +138,14 @@ public class MailPage extends AbstractPage {
     }
 
     public void closeErrorPopup() {
-        click(Locators.ERROR_POPUP_CLOSE_BUTTON);
+        errorPopupCloseButton.click();
     }
 
     public void logout() {
-        click(Locators.INTERFACE_LOADED);
+        driver.findElement(Locators.INTERFACE_LOADED).click();
         WebElement iframe = wait.until(ExpectedConditions.presenceOfElementLocated(Locators.IFRAME_ACCOUNT_FRAME));
         driver.switchTo().frame(iframe);
-        click(Locators.LOGOUT_BUTTON);
+        driver.findElement(Locators.LOGOUT_BUTTON).click();
         wait.until(ExpectedConditions.visibilityOfElementLocated(Locators.LOGOUT_SCREEN));
-    }
-
-    private void click(By locator) {
-
-        wait.until(ExpectedConditions.elementToBeClickable(locator)).click();
-    }
-
-    private void sendKeys(By locator, String text) {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(locator)).sendKeys(text);
     }
 }
