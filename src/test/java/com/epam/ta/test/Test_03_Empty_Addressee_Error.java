@@ -1,4 +1,4 @@
-package test;
+package com.epam.ta.test;
 import com.epam.ta.driver.DriverSingleton;
 import com.epam.ta.model.User;
 import com.epam.ta.page.LoginPage;
@@ -11,17 +11,17 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-import static org.testng.AssertJUnit.assertFalse;
 import static org.testng.AssertJUnit.assertTrue;
 
 @Listeners(TestListener.class)
 
-public class Test_01_SendEmail {
+public class Test_03_Empty_Addressee_Error {
 
     private WebDriver driver;
     private LoginPage loginPage;
     private MailPage mailPage;
 
+    User testUser = UserCreator.withCredentialsFromProperty();
 
     @BeforeMethod
     public void setUp() {
@@ -31,28 +31,23 @@ public class Test_01_SendEmail {
     }
 
     @Test
-    public void testSendEmailThroughDrafts() {
-        User testUser = UserCreator.withCredentialsFromProperty();
-        String recipient = "mateo.castilloa@cun.edu.co";
-        String subject = "Test Email-" + System.currentTimeMillis();
-        String body = "This is a test email body.";
+    public void testSendWithoutAddresseeShowsError() {
+        String subject = "Test Missing Addressee";
+        String body = "This email has no recipient.";
 
         loginPage.navigateToMail();
         loginPage.login(testUser.getUsername(), testUser.getPassword());
         assertTrue("Login failed", loginPage.isUserLoggedIn());
 
-        mailPage.composeEmail(recipient, subject, body);
-        mailPage.saveAsDraft();
-        mailPage.openDraftsFolder();
-        assertTrue("Draft not found", mailPage.isEmailInDrafts(subject));
-        mailPage.openDraftMessage(subject);
-        mailPage.openDraftEmail(subject);
+        mailPage.composeEmailWithoutRecipient(subject, body);
         mailPage.sendEmail();
-        mailPage.openDraftsFolder();
-        assertFalse("Draft still exists", mailPage.isEmailInDrafts(subject));
-        mailPage.moveToElement();
-        mailPage.openSentFolder();
-        assertTrue("Email not in sent", mailPage.isEmailInSent(subject));
+
+        assertTrue("Error pop-up not displayed", mailPage.isErrorPopupDisplayed());
+
+        String expectedMessage = "Message not sent";
+        assertTrue("Incorrect error message", mailPage.getErrorPopupText().contains(expectedMessage));
+
+        mailPage.closeErrorPopup();
         mailPage.logout();
     }
 

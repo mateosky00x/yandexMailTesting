@@ -1,4 +1,4 @@
-package test;
+package com.epam.ta.test;
 import com.epam.ta.driver.DriverSingleton;
 import com.epam.ta.model.User;
 import com.epam.ta.page.LoginPage;
@@ -10,12 +10,12 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-
+import static org.testng.AssertJUnit.assertFalse;
 import static org.testng.AssertJUnit.assertTrue;
 
 @Listeners(TestListener.class)
 
-public class Test_03_Empty_Addressee_Error {
+public class Test_02_Delete_Draft {
 
     private WebDriver driver;
     private LoginPage loginPage;
@@ -31,23 +31,29 @@ public class Test_03_Empty_Addressee_Error {
     }
 
     @Test
-    public void testSendWithoutAddresseeShowsError() {
-        String subject = "Test Missing Addressee";
-        String body = "This email has no recipient.";
+    public void testDeleteDraft() {
+        String recipient = "mateo.castilloa@cun.edu.co";
+        String subject = "Test Draft Deletion";
+        String body = "This is a test draft email to be deleted.";
 
         loginPage.navigateToMail();
         loginPage.login(testUser.getUsername(), testUser.getPassword());
         assertTrue("Login failed", loginPage.isUserLoggedIn());
 
-        mailPage.composeEmailWithoutRecipient(subject, body);
-        mailPage.sendEmail();
+        mailPage.composeEmail(recipient, subject, body);
+        mailPage.saveAsDraft();
 
-        assertTrue("Error pop-up not displayed", mailPage.isErrorPopupDisplayed());
+        mailPage.openDraftsFolder();
+        assertTrue("Draft not found", mailPage.isEmailInDrafts(subject));
+        mailPage.openDraftMessage(subject);
+        mailPage.openDraftEmail(subject);
 
-        String expectedMessage = "Message not sent";
-        assertTrue("Incorrect error message", mailPage.getErrorPopupText().contains(expectedMessage));
+        mailPage.saveAsDraft();
+        mailPage.deleteDraft();
 
-        mailPage.closeErrorPopup();
+        mailPage.openDraftsFolder();
+        assertFalse("Draft still exists after deletion", mailPage.isEmailInDrafts(subject));
+
         mailPage.logout();
     }
 
@@ -56,3 +62,4 @@ public class Test_03_Empty_Addressee_Error {
         DriverSingleton.closeDriver();
     }
 }
+

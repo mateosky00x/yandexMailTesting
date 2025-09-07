@@ -3,9 +3,9 @@
     <test name="Run All Tests">
         <parameter name="browser" value="firefox"/>
         <classes>
-            <class name="test.Test_01_SendEmail"/>
-            <class name="test.Test_02_Delete_Draft"/>
-            <class name="test.Test_03_Empty_Addressee_Error"/>
+            <class name="com.epam.ta.test.Test_01_SendEmail"/>
+            <class name="com.epam.ta.test.Test_02_Delete_Draft"/>
+            <class name="com.epam.ta.test.Test_03_Empty_Addressee_Error"/>
         </classes>
     </test>
 </suite>

@@ -1,4 +1,4 @@
-package test;
+package com.epam.ta.test;
 import com.epam.ta.driver.DriverSingleton;
 import com.epam.ta.util.TestListener;
 import org.openqa.selenium.WebDriver;
