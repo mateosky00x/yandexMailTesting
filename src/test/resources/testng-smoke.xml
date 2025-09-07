@@ -3,7 +3,7 @@
 <suite name="Smoke" verbose="1" >
     <test name="UserAccess"   >
         <classes>
-            <class name="com.epam.ta.test.Test_01_SendEmail" />
+            <class name="test.Test_01_SendEmail" />
         </classes>
     </test>
 </suite>
