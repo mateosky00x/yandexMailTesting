@@ -7,7 +7,6 @@ import org.openqa.selenium.WebDriver;
 
 public class PageFactory {
 
-    @SuppressWarnings("unchecked")
     public static <T extends AbstractPage> T getPage(Class<T> pageClass, WebDriver driver) {
         if (pageClass.equals(LoginPage.class)) {
             return (T) new LoginPage(driver);

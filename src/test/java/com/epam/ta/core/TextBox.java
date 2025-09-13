@@ -3,12 +3,9 @@ package com.epam.ta.core;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-public class TextBox extends Element {
-    public TextBox(WebDriver driver, By locator) {
-        super(driver, locator);
-    }
+public class TextBox extends WebCoreElement {
 
-    public void enterText(String text) {
-        type(text);
+    public TextBox(WebDriver driver, By by) {
+        super(driver, by);
     }
 }

@@ -1,11 +1,11 @@
 package com.epam.ta.page;
 
-import com.epam.ta.model.AbstractPage;
 import com.epam.ta.core.Button;
 import com.epam.ta.core.TextBox;
+import com.epam.ta.core.Label;
+import com.epam.ta.model.AbstractPage;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
 
@@ -13,7 +13,6 @@ import static com.epam.ta.page.Locators.DRAFT_MESSAGE;
 
 public class MailPage extends AbstractPage {
 
-    // Elements from core
     private Button composeButton;
     private TextBox recipientField;
     private TextBox subjectField;
@@ -21,10 +20,17 @@ public class MailPage extends AbstractPage {
     private Button closeButton;
     private Button sendButton;
     private Button draftsFolder;
-    private Button sentFolder;
+    final Button sentFolder;
     private Button selectMessage;
     private Button deleteMessage;
     private Button errorPopupCloseButton;
+
+    private Label draftContainer;
+    private Label messageSent;
+    private Label errorPopup;
+    private Label logoutButton;
+    private Label interfaceLoaded;
+    private Label logoutScreen;
 
     public MailPage(WebDriver driver) {
         super(driver);
@@ -40,6 +46,13 @@ public class MailPage extends AbstractPage {
         this.selectMessage = new Button(driver, Locators.SELECT_MESSAGE);
         this.deleteMessage = new Button(driver, Locators.DELETE_MESSAGE);
         this.errorPopupCloseButton = new Button(driver, Locators.ERROR_POPUP_CLOSE_BUTTON);
+
+        this.draftContainer = new Label(driver, Locators.DRAFT_CONTAINER);
+        this.messageSent = new Label(driver, Locators.MESSAGE_SENT);
+        this.errorPopup = new Label(driver, Locators.ERROR_POPUP);
+        this.logoutButton = new Label(driver, Locators.LOGOUT_BUTTON);
+        this.interfaceLoaded = new Label(driver, Locators.INTERFACE_LOADED);
+        this.logoutScreen = new Label(driver, Locators.LOGOUT_SCREEN);
     }
 
     @Override
@@ -49,19 +62,18 @@ public class MailPage extends AbstractPage {
 
     public void composeEmail(String recipient, String subject, String body) {
         composeButton.click();
-        recipientField.enterText(recipient);
-        subjectField.enterText(subject);
-        bodyField.enterText(body);
+        recipientField.typeText(recipient);
+        subjectField.typeText(subject);
+        bodyField.typeText(body);
     }
 
     public void composeEmailWithoutRecipient(String subject, String body) {
         composeButton.click();
-        subjectField.enterText(subject);
-        bodyField.enterText(body);
+        subjectField.typeText(subject);
+        bodyField.typeText(body);
     }
 
     public void saveAsDraft() {
-        wait.until(ExpectedConditions.presenceOfElementLocated(Locators.CLOSE_BUTTON));
         closeButton.click();
     }
 
@@ -70,17 +82,16 @@ public class MailPage extends AbstractPage {
     }
 
     public void openSentFolder() {
+        // clicking with JS
         JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
         WebElement element = driver.findElement(Locators.SENT_FOLDER);
-        wait.until(ExpectedConditions.elementToBeClickable(Locators.SENT_FOLDER));
         jsExecutor.executeScript("arguments[0].click();", element);
     }
 
     public boolean isEmailInDrafts(String subject) {
         By draftEmail = By.xpath(String.format(DRAFT_MESSAGE, subject));
         try {
-            Thread.sleep(2000);
-            wait.until(ExpectedConditions.visibilityOfElementLocated(Locators.DRAFT_CONTAINER));
+            draftContainer.isDisplayed();
             return driver.findElement(draftEmail).isDisplayed();
         } catch (Exception e) {
             return false;
@@ -89,8 +100,8 @@ public class MailPage extends AbstractPage {
 
     public boolean isEmailInSent(String subject) {
         try {
-            wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(String.format(DRAFT_MESSAGE, subject))));
-            return driver.findElement(By.xpath(String.format(DRAFT_MESSAGE, subject))).isDisplayed();
+            By sentEmail = By.xpath(String.format(DRAFT_MESSAGE, subject));
+            return driver.findElement(sentEmail).isDisplayed();
         } catch (NoSuchElementException e) {
             return false;
         }
@@ -98,8 +109,8 @@ public class MailPage extends AbstractPage {
 
     public void moveToElement() {
         Actions actions = new Actions(driver);
-        WebElement sentButton = driver.findElement(Locators.SENT_FOLDER);
-        actions.moveToElement(sentButton).perform();
+        WebElement sentButtonElement = driver.findElement(Locators.SENT_FOLDER);
+        actions.moveToElement(sentButtonElement).perform();
     }
 
     public void openDraftMessage(String subject) {
@@ -107,7 +118,6 @@ public class MailPage extends AbstractPage {
     }
 
     public void openDraftEmail(String subject) {
-        wait.until(ExpectedConditions.presenceOfElementLocated(Locators.SUBJECT_FIELD));
         List<WebElement> elements = driver.findElements(Locators.SUBJECT_FIELD);
         elements.stream()
                 .filter(e -> e.getText().contains(subject))
@@ -117,7 +127,7 @@ public class MailPage extends AbstractPage {
 
     public void sendEmail() {
         sendButton.click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(Locators.MESSAGE_SENT));
+        messageSent.isDisplayed();
     }
 
     public void deleteDraft() {
@@ -126,15 +136,11 @@ public class MailPage extends AbstractPage {
     }
 
     public boolean isErrorPopupDisplayed() {
-        try {
-            return driver.findElement(Locators.ERROR_POPUP).isDisplayed();
-        } catch (NoSuchElementException e) {
-            return false;
-        }
+        return errorPopup.isDisplayed();
     }
 
     public String getErrorPopupText() {
-        return driver.findElement(Locators.ERROR_POPUP).getText();
+        return errorPopup.getText();
     }
 
     public void closeErrorPopup() {
@@ -142,10 +148,11 @@ public class MailPage extends AbstractPage {
     }
 
     public void logout() {
-        driver.findElement(Locators.INTERFACE_LOADED).click();
-        WebElement iframe = wait.until(ExpectedConditions.presenceOfElementLocated(Locators.IFRAME_ACCOUNT_FRAME));
+        interfaceLoaded.click();
+        WebElement iframe = driver.findElement(Locators.IFRAME_ACCOUNT_FRAME);
         driver.switchTo().frame(iframe);
-        driver.findElement(Locators.LOGOUT_BUTTON).click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(Locators.LOGOUT_SCREEN));
+        logoutButton.click();
+        logoutScreen.isDisplayed();
     }
 }
+

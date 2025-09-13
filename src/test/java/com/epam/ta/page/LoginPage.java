@@ -1,10 +1,10 @@
 package com.epam.ta.page;
 
-import com.epam.ta.model.AbstractPage;
 import com.epam.ta.core.Button;
 import com.epam.ta.core.TextBox;
+import com.epam.ta.core.Label;
+import com.epam.ta.model.AbstractPage;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class LoginPage extends AbstractPage {
 
@@ -13,6 +13,7 @@ public class LoginPage extends AbstractPage {
     private Button submitButton;
     private TextBox passwordField;
     private Button nextButton;
+    private Label interfaceLoaded;
 
     public LoginPage(WebDriver driver) {
         super(driver);
@@ -21,6 +22,7 @@ public class LoginPage extends AbstractPage {
         this.submitButton = new Button(driver, Locators.SUBMIT_BUTTON);
         this.passwordField = new TextBox(driver, Locators.PASSWORD_FIELD);
         this.nextButton = new Button(driver, Locators.NEXT_BUTTON);
+        this.interfaceLoaded = new Label(driver, Locators.INTERFACE_LOADED);
     }
 
     @Override
@@ -35,15 +37,14 @@ public class LoginPage extends AbstractPage {
 
     public void login(String username, String password) {
         loginButton.click();
-        usernameField.enterText(username);
+        usernameField.typeText(username);
         submitButton.click();
-        passwordField.enterText(password);
+        passwordField.typeText(password);
         nextButton.click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(Locators.INTERFACE_LOADED));
+        interfaceLoaded.isDisplayed();
     }
 
     public boolean isUserLoggedIn() {
-        return driver.findElement(Locators.INTERFACE_LOADED).isDisplayed();
+        return interfaceLoaded.isDisplayed();
     }
 }
-
