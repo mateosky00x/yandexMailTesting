@@ -20,15 +20,14 @@
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>4.1.2</version>
+            <version>4.11.0</version>
         </dependency>
 
         <!-- WebDriverManager -->
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
-            <version>5.8.0</version>
-            <scope>test</scope>
+            <version>5.6.2</version>
         </dependency>
 
         <!-- TestNG -->
@@ -36,15 +35,13 @@
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>7.4.0</version>
-            <scope>test</scope>
-
         </dependency>
 
         <!-- Hamcrest (optional matchers) -->
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest</artifactId>
-            <version>2.1</version>
+            <version>2.2</version>
             <scope>test</scope>
         </dependency>
 
@@ -52,24 +49,24 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.6</version>
+            <version>2.11.0</version>
         </dependency>
 
         <!-- Logging -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
-            <version>2.11.1</version>
+            <version>2.20.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.11.1</version>
+            <version>2.20.0</version>
         </dependency>
     </dependencies>
+
     <build>
         <plugins>
-
             <!-- Compiler -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

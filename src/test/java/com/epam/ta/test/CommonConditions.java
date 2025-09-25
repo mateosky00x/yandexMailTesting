@@ -2,7 +2,7 @@ package com.epam.ta.test;
 
 import com.epam.ta.driver.DriverSingleton;
 import com.epam.ta.factory.PageFactory;
-import com.epam.ta.model.AbstractPage;
+import com.epam.ta.page.BasePage;
 import com.epam.ta.util.TestListener;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterMethod;
@@ -25,7 +25,7 @@ public class CommonConditions {
     }
 
     // ✅ Factory method to get pages
-    protected <T extends AbstractPage> T getPage(Class<T> pageClass) {
+    protected <T extends BasePage> T getPage(Class<T> pageClass) {
         return PageFactory.getPage(pageClass, driver);
     }
 }

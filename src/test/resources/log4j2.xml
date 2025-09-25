@@ -1,21 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration>
+<Configuration status="WARN">
     <Appenders>
-        <Console name="Console">
-            <PatternLayout>
-                <Pattern>%d %p %c{2} [%t] %l %m%n</Pattern>
-            </PatternLayout>
+        <!-- Console Appender -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </Console>
+
+        <!-- File Appender - matches your original path -->
         <File name="File" fileName="target/logs/github-automation.log">
-            <PatternLayout>
-                <Pattern>%d %p %c{2} [%t] %m%n</Pattern>
-            </PatternLayout>
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </File>
+
+        <!-- Rolling File Appender for better log management -->
+        <RollingFile name="RollingFile" fileName="target/logs/automation-rolling.log"
+                     filePattern="target/logs/automation-rolling-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5"/>
+        </RollingFile>
     </Appenders>
+
     <Loggers>
-        <Root level="trace">
+        <!-- Root Logger - changed from trace to INFO for better performance -->
+        <Root level="INFO">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="File"/>
         </Root>
+
+        <!-- Your Page Object Classes -->
+        <Logger name="com.epam.ta.page" level="DEBUG" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
+            <AppenderRef ref="RollingFile"/>
+        </Logger>
+
+        <!-- Your Test Classes -->
+        <Logger name="com.epam.ta.test" level="INFO" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
+        </Logger>
+
+        <!-- Reduce Selenium noise -->
+        <Logger name="org.openqa.selenium" level="WARN" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <!-- Reduce WebDriverManager noise -->
+        <Logger name="io.github.bonigarcia.wdm" level="WARN" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <!-- Reduce HTTP client noise -->
+        <Logger name="org.apache.http" level="WARN" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
     </Loggers>
 </Configuration>
