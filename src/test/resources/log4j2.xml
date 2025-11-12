@@ -21,13 +21,19 @@
             </Policies>
             <DefaultRolloverStrategy max="5"/>
         </RollingFile>
+
+        <!-- ReportPortal Appender - sends logs to ReportPortal -->
+        <ReportPortalLog4j2Appender name="ReportPortalAppender">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n%throwable"/>
+        </ReportPortalLog4j2Appender>
     </Appenders>
 
     <Loggers>
-        <!-- Root Logger - changed from trace to INFO for better performance -->
+        <!-- Root Logger - logs to Console, File, and ReportPortal -->
         <Root level="INFO">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="File"/>
+            <AppenderRef ref="ReportPortalAppender"/>
         </Root>
 
         <!-- Your Page Object Classes -->
@@ -35,12 +41,19 @@
             <AppenderRef ref="Console"/>
             <AppenderRef ref="File"/>
             <AppenderRef ref="RollingFile"/>
+            <AppenderRef ref="ReportPortalAppender"/>
         </Logger>
 
         <!-- Your Test Classes -->
         <Logger name="com.epam.ta.test" level="INFO" additivity="false">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="File"/>
+            <AppenderRef ref="ReportPortalAppender"/>
+        </Logger>
+
+        <!-- Binary data logger for screenshots/attachments in ReportPortal -->
+        <Logger name="binary_data_logger" level="TRACE" additivity="false">
+            <AppenderRef ref="ReportPortalAppender"/>
         </Logger>
 
         <!-- Reduce Selenium noise -->
@@ -55,6 +68,16 @@
 
         <!-- Reduce HTTP client noise -->
         <Logger name="org.apache.http" level="WARN" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <!-- Reduce ReportPortal client noise (optional) -->
+        <Logger name="com.epam.reportportal" level="WARN" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <!-- Reduce ReportPortal HTTP client noise (optional) -->
+        <Logger name="com.epam.reportportal.service" level="WARN" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>
     </Loggers>
