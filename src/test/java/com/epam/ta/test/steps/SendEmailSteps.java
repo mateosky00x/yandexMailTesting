@@ -1,4 +1,4 @@
-package com.epam.ta.test;
+package com.epam.ta.test.steps;
 
 import com.epam.ta.driver.DriverSingleton;
 import com.epam.ta.factory.PageFactory;

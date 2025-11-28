@@ -4,7 +4,7 @@ import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
 
 @CucumberOptions(
-        features = "src/test/resources/features/",
+        features = "src/test/resources/features/sendEmail.feature",
         glue = {"com.epam.ta.test"},
         plugin = {
                 "pretty",
@@ -14,5 +14,5 @@ import io.cucumber.testng.CucumberOptions;
         },
         monochrome = true
 )
-public class CucumberTestRunner extends AbstractTestNGCucumberTests {
+public class SendEmailRunner extends AbstractTestNGCucumberTests {
 }

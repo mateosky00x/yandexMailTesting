@@ -4,7 +4,7 @@ import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
 
 @CucumberOptions(
-        features = "src/test/resources/features/emptyAddresseeError",
+        features = "src/test/resources/features/deleteDraftEmail.feature",
         glue = {"com.epam.ta.test"},
         plugin = {
                 "pretty",

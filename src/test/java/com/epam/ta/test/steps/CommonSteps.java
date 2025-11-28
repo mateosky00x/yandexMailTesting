@@ -1,2 +1,6 @@
-package com.epam.ta.test.steps;public class CommonSteps {
+package com.epam.ta.test.steps;
+
+public class CommonSteps {
+
+
 }
