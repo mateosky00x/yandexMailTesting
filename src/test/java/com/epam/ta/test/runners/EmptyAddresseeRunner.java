@@ -5,7 +5,7 @@ import io.cucumber.testng.CucumberOptions;
 
 @CucumberOptions(
         features = "src/test/resources/features/emptyAddresseeError.feature",
-        glue = {"com.epam.ta.test"},
+        glue = {"com.epam.ta.steps"},
         plugin = {
                 "pretty",
                 "html:target/cucumber-reports/cucumber.html",

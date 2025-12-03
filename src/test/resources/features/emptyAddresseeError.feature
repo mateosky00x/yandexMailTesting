@@ -1,14 +1,14 @@
 Feature: Empty Addressee Error
   As a mail user
   I want to see an error when sending without a recipient
-  So that I don't send emails to no one
+  So that I avoid sending emails to nobody
 
-  Background: User is logged in
+  Background:
     Given the user navigates to the mail application
     When the user logs in with valid credentials
     Then the user should be successfully logged in
 
-  Scenario: Send email without addressee shows error
+  Scenario: Sending an email without a recipient shows an error
     When the user composes an email without recipient with subject "Test Missing Addressee" and body "This email has no recipient."
     And the user sends the email
     Then an error popup should be displayed

@@ -52,7 +52,7 @@ public class MailPage extends BasePage {
     private Label errorPopup;
     private Label logoutButton;
     private Label interfaceLoaded;
-    private Label logoutScreen;
+    public Label logoutScreen;
 
     public MailPage(WebDriver driver) {
         super(driver);

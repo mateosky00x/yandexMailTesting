@@ -20,7 +20,4 @@ public abstract class BasePage {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-
-
-
 }

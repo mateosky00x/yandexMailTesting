@@ -29,9 +29,13 @@ public class DriverSingleton {
                 default:
                     ChromeOptions options = new ChromeOptions();
                     options.addArguments("--remote-allow-origins=*");
+
+                    System.clearProperty("webdriver.chrome.driver"); // <-- Fix
                     WebDriverManager.chromedriver().setup();
+
                     driver = new ChromeDriver(options);
                     break;
+
 
             }
 
