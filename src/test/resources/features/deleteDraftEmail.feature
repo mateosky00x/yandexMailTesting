@@ -9,14 +9,14 @@ Feature: Delete Draft Email
     Then the user should be logged into the mailbox
 
   Scenario: Delete draft email
-    When the user composes an email with recipient "<recipient>", subject "<subject>" and body "<body>"
+    When the user composes an email with recipient "recipient", subject "subject" and body "body"
     And the user saves the email as draft
     And the user opens the drafts folder
-    Then the email with subject "<subject>" should appear in drafts
+    Then the email with subject "subject" should appear in drafts
     And the user saves the email as draft
     And the user deletes the draft
     And the user opens the drafts folder
-    Then the email with subject "<subject>" should not appear in drafts
+    Then the email with subject "subject" should not appear in drafts
     And the user logs out
 
   Scenario Outline: Delete multiple drafts

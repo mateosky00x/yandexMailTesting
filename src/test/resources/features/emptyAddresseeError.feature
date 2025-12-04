@@ -9,7 +9,7 @@ Feature: Empty Addressee Error
     Then the user should be logged into the mailbox
 
   Scenario: Sending an email without a recipient shows an error
-    When the user composes an email without a recipient, with subject "<subject>" and body "<body>"
+    When the user composes an email without a recipient, with subject "subject" and body "body"
     And the user sends the email
     Then an error popup should be displayed
     And the user logs out

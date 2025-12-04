@@ -9,11 +9,11 @@ Feature: Send Email
     Then the user should be logged into the mailbox
 
   Scenario: Send an email from a draft
-    When the user composes an email with recipient "<recipient>", subject "<subject>" and body "<body>"
+    When the user composes an email with recipient "recipient", subject "subject" and body "body"
     And the user saves the email as draft
     And the user opens the drafts folder
-    Then the email with subject "<subject>" should appear in drafts
+    Then the email with subject "subject" should appear in drafts
     And the user sends the email
     When the user opens the sent folder
-    Then the email with subject containing "<subject>" should appear in sent
+    Then the email with subject containing "subject" should appear in sent
     And the user logs out
