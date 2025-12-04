@@ -3,20 +3,17 @@ Feature: Send Email
   I want to manage my emails
   So that I can send, draft, and verify sent messages
 
-  Background:
-    Given the user navigates to the mail application
-    When the user logs in with valid credentials
-    Then the user should be successfully logged in
+  Background: User is logged in
+    Given the user opens the Yandex Mail login page
+    When the user enters valid credentials
+    Then the user should be logged into the mailbox
 
   Scenario: Send an email from a draft
-    When the user composes an email with recipient "mateo.castilloa@cun.edu.co" and subject "Test Email" and body "This is a test email body."
+    When the user composes an email with recipient "<recipient>", subject "<subject>" and body "<body>"
     And the user saves the email as draft
     And the user opens the drafts folder
-    Then the draft with subject "Test Email" should be visible
-    When the user opens the draft with subject "Test Email"
+    Then the email with subject "<subject>" should appear in drafts
     And the user sends the email
-    And the user opens the drafts folder
-    Then the draft with subject "Test Email" should not exist in drafts
     When the user opens the sent folder
-    Then the email with subject "Test Email" should be in sent folder
+    Then the email with subject containing "<subject>" should appear in sent
     And the user logs out

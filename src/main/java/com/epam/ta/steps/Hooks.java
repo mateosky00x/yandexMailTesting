@@ -1,24 +1,24 @@
 package com.epam.ta.steps;
 
+import com.epam.ta.driver.DriverSingleton;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 
 public class Hooks {
 
-    public static WebDriver driver;
+    private WebDriver driver;
 
     @Before
     public void setUp() {
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
+        // Initializes WebDriver once per scenario
+        driver = DriverSingleton.getDriver();
     }
 
     @After
     public void tearDown() {
-        if (driver != null) {
-            driver.quit();
-        }
+        // Always quit after each scenario
+        DriverSingleton.closeDriver();
     }
 }
+

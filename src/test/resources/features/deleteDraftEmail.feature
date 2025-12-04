@@ -4,34 +4,30 @@ Feature: Delete Draft Email
   So that I can remove unwanted drafts
 
   Background: User is logged in
-    Given the user navigates to the mail application
-    When the user logs in with valid credentials
-    Then the user should be successfully logged in
+    Given the user opens the Yandex Mail login page
+    When the user enters valid credentials
+    Then the user should be logged into the mailbox
 
   Scenario: Delete draft email
-    When the user composes an email with recipient "mateo.castilloa@cun.edu.co" and subject "Test Draft Deletion" and body "This is a test draft email to be deleted."
+    When the user composes an email with recipient "<recipient>", subject "<subject>" and body "<body>"
     And the user saves the email as draft
     And the user opens the drafts folder
-    Then the draft with subject "Test Draft Deletion" should be visible
-    When the user opens the draft message with subject "Test Draft Deletion"
-    And the user opens the draft email with subject "Test Draft Deletion"
+    Then the email with subject "<subject>" should appear in drafts
     And the user saves the email as draft
     And the user deletes the draft
     And the user opens the drafts folder
-    Then the draft should not exist after deletion
+    Then the email with subject "<subject>" should not appear in drafts
     And the user logs out
 
   Scenario Outline: Delete multiple drafts
-    When the user composes an email with recipient "<recipient>" and subject "<subject>" and body "<body>"
+    When the user composes an email with recipient "<recipient>", subject "<subject>" and body "<body>"
     And the user saves the email as draft
     And the user opens the drafts folder
-    Then the draft with subject "<subject>" should be visible
-    When the user opens the draft message with subject "<subject>"
-    And the user opens the draft email with subject "<subject>"
+    Then the email with subject "<subject>" should appear in drafts
     And the user saves the email as draft
     And the user deletes the draft
     And the user opens the drafts folder
-    Then the draft should not exist after deletion
+    Then the email with subject "<subject>" should not appear in drafts
     And the user logs out
 
     Examples:
